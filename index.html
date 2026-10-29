@@ -51,34 +51,106 @@
             -moz-appearance: textfield;
         }
 
-        /* Print Style Optimization */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white;
-                color: black;
-                font-size: 12pt;
-            }
-            .container {
-                max-width: 100% !important;
-                padding: 0 !important;
-            }
-            .border-print {
-                border: 1px solid #ccc !important;
-            }
-            .page-break {
-                page-break-before: always;
-            }
-        }
-
         /* Minimal Accordion Style */
         details > summary {
             list-style: none;
         }
         details > summary::-webkit-details-marker {
             display: none;
+        }
+
+        /* PRINT / PDF STYLES - SWISS MINIMALIST PDF LAYOUT */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm 12mm 10mm 12mm;
+            }
+            html, body {
+                background: white !important;
+                color: black !important;
+                font-size: 9.5pt !important;
+                line-height: 1.3 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            header {
+                border-bottom: 2px solid #000 !important;
+                padding-bottom: 8px !important;
+                margin-bottom: 12px !important;
+            }
+            main {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                space-y: 1rem !important;
+            }
+            section {
+                margin-bottom: 12px !important;
+                page-break-inside: avoid;
+            }
+            details {
+                open: true !important;
+                border: 1px solid #E5E5E5 !important;
+            }
+            details summary {
+                pointer-events: none !important;
+                padding: 6px 10px !important;
+                background-color: #FAFAFA !important;
+            }
+            details > div {
+                display: block !important;
+                padding: 10px !important;
+            }
+            .grid {
+                gap: 8px !important;
+            }
+            .p-6, .p-5, .p-4 {
+                padding: 10px !important;
+            }
+            .space-y-10 > * + * {
+                margin-top: 1rem !important;
+            }
+            .space-y-6 > * + * {
+                margin-top: 0.75rem !important;
+            }
+            .space-y-4 > * + * {
+                margin-top: 0.5rem !important;
+            }
+            .text-4xl, .text-5xl {
+                font-size: 2rem !important;
+            }
+            .text-3xl {
+                font-size: 1.5rem !important;
+            }
+            input, select {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                font-weight: 600 !important;
+                font-size: 9.5pt !important;
+                height: auto !important;
+            }
+            .border-print {
+                border: 1px solid #111 !important;
+            }
+            .print-badge {
+                border: 1px solid #111;
+                padding: 1px 6px;
+                font-size: 8pt;
+            }
+            /* Prevent awkward page break inside calculation tables and summary cards */
+            .break-inside-avoid, table, tr, #calculationBreakdown, #bracketDetailsWrapper, #adviceContainer {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            footer {
+                margin-top: 15px !important;
+                padding-top: 8px !important;
+                font-size: 7.5pt !important;
+            }
         }
     </style>
 </head>
@@ -90,14 +162,14 @@
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-brand-text">Tax Calculator</h1>
             </div>
-            <div class="flex items-center gap-3 no-print">
+            <div class="flex items-center gap-3">
                 <span class="text-xs font-medium text-brand-muted uppercase tracking-wider">ปีภาษี</span>
                 <select id="taxYearSelect" class="bg-brand-card border border-brand-border rounded px-3 py-1.5 text-sm font-medium focus:outline-none focus:border-black cursor-pointer">
                     <option value="2567" selected>2567 (ยื่นต้นปี 2568)</option>
                     <option value="2568">2568 (ยื่นต้นปี 2569)</option>
                     <option value="2566">2566 (ยื่นต้นปี 2567)</option>
                 </select>
-                <a href="https://www.rd.go.th" target="_blank" rel="noopener noreferrer" class="text-xs text-brand-muted hover:text-black underline ml-2 transition-colors">
+                <a href="https://www.rd.go.th" target="_blank" rel="noopener noreferrer" class="text-xs text-brand-muted hover:text-black underline ml-2 transition-colors no-print">
                     กรมสรรพากร ↗
                 </a>
             </div>
@@ -111,7 +183,7 @@
         <section class="space-y-6">
             <div class="border-b border-brand-border pb-3 flex justify-between items-end">
                 <h2 class="text-lg font-bold tracking-tight uppercase text-brand-text">1. ข้อมูลรายได้และค่าใช้จ่าย</h2>
-                <span class="text-xs text-brand-muted">ประมวลผลทันทีในเบราว์เซอร์</span>
+                <span class="text-xs text-brand-muted no-print">ประมวลผลทันทีในเบราว์เซอร์</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -127,7 +199,7 @@
                         <option value="40_8">เงินได้ประเภท 40(8) — การพาณิชย์/ขายของออนไลน์/รายได้อื่นๆ</option>
                         <option value="MIXED">เงินได้หลายประเภท (ระบุรายละเอียดแยก)</option>
                     </select>
-                    <p class="text-xs text-brand-muted">
+                    <p class="text-xs text-brand-muted no-print">
                         * ระบบจะคำนวณหักค่าใช้จ่ายตามอัตราที่กฎหมายกำหนดให้อัตโนมัติ สามารถแก้ไขเพิ่มเติมได้
                     </p>
                 </div>
@@ -139,9 +211,9 @@
                     </label>
                     <div class="relative">
                         <input type="number" id="grossIncome" placeholder="0" min="0" step="1000" class="w-full bg-brand-card border border-brand-border rounded-lg p-3 text-base font-mono focus:outline-none focus:border-black transition-colors">
-                        <span class="absolute right-3 top-3 text-xs text-brand-muted">THB</span>
+                        <span class="absolute right-3 top-3 text-xs text-brand-muted no-print">THB</span>
                     </div>
-                    <p class="text-xs text-brand-muted">รวมโบนัส ค่าคอมมิชชัน และเงินพิเศษอื่นๆ รวมทั้งปี</p>
+                    <p class="text-xs text-brand-muted no-print">รวมโบนัส ค่าคอมมิชชัน และเงินพิเศษอื่นๆ รวมทั้งปี</p>
                 </div>
 
                 <!-- Withholding Tax -->
@@ -151,9 +223,9 @@
                     </label>
                     <div class="relative">
                         <input type="number" id="taxWithheld" placeholder="0" min="0" step="100" class="w-full bg-brand-card border border-brand-border rounded-lg p-3 text-base font-mono focus:outline-none focus:border-black transition-colors">
-                        <span class="absolute right-3 top-3 text-xs text-brand-muted">THB</span>
+                        <span class="absolute right-3 top-3 text-xs text-brand-muted no-print">THB</span>
                     </div>
-                    <p class="text-xs text-brand-muted">ภาษีที่บริษัทหรือผู้จ่ายเงินหักสำรองชำระไว้แล้ว (ดูตามใบ 50 ทวิ)</p>
+                    <p class="text-xs text-brand-muted no-print">ภาษีที่บริษัทหรือผู้จ่ายเงินหักสำรองชำระไว้แล้ว (ดูตามใบ 50 ทวิ)</p>
                 </div>
 
                 <!-- Mixed Income Breakdown (Hidden by default) -->
@@ -195,22 +267,22 @@
                     </div>
                     <div class="relative">
                         <input type="number" id="customExpense" placeholder="0" min="0" class="w-full bg-brand-card border border-brand-border rounded-lg p-3 text-base font-mono focus:outline-none focus:border-black transition-colors">
-                        <span class="absolute right-3 top-3 text-xs text-brand-muted">THB</span>
+                        <span class="absolute right-3 top-3 text-xs text-brand-muted no-print">THB</span>
                     </div>
-                    <p class="text-xs text-brand-muted">
+                    <p class="text-xs text-brand-muted no-print">
                         * ค่าใช้จ่ายทางภาษีคิดตามอัตราเหมาเหมาของประเภทเงินได้ (เงินเดือน/ฟรีแลนซ์คิด 50% ไม่เกิน 100,000 บาท) ซึ่งอาจแตกต่างจากค่าใช้จ่ายจริงที่เกิดขึ้น
                     </p>
                 </div>
             </div>
 
             <!-- EXPANDABLE DEDUCTIONS SECTION -->
-            <details class="group border border-brand-border rounded-lg bg-white overflow-hidden transition-all duration-200" open>
+            <details id="deductionsDetails" class="group border border-brand-border rounded-lg bg-white overflow-hidden transition-all duration-200" open>
                 <summary class="flex justify-between items-center p-4 bg-brand-card cursor-pointer select-none hover:bg-gray-100 transition-colors">
                     <div class="flex items-center gap-2">
                         <span class="font-semibold text-sm">2. รายการค่าลดหย่อนภาษี</span>
-                        <span id="deductionSummaryBadge" class="text-xs bg-black text-white px-2 py-0.5 rounded-full font-mono">60,000 บาท</span>
+                        <span id="deductionSummaryBadge" class="text-xs bg-black text-white px-2 py-0.5 rounded-full font-mono print-badge">60,000 บาท</span>
                     </div>
-                    <span class="text-xs text-brand-muted group-open:rotate-180 transition-transform duration-200">▼</span>
+                    <span class="text-xs text-brand-muted group-open:rotate-180 transition-transform duration-200 no-print">▼</span>
                 </summary>
                 
                 <div class="p-4 md:p-6 space-y-6 border-t border-brand-border text-sm">
@@ -296,11 +368,11 @@
         <section class="space-y-6">
             <div class="border-b border-brand-border pb-3 flex justify-between items-end">
                 <h2 class="text-lg font-bold tracking-tight uppercase text-brand-text">2. สรุปผลการคำนวณภาษี</h2>
-                <span class="text-xs text-brand-muted">อัปเดตแบบเรียลไทม์</span>
+                <span class="text-xs text-brand-muted no-print">อัปเดตแบบเรียลไทม์</span>
             </div>
 
             <!-- Main Result Cards (Swiss Editorial Layout) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 break-inside-avoid">
                 <!-- Result Box 1: Tax Payable / Refundable -->
                 <div class="md:col-span-2 border-2 border-black p-6 rounded-lg bg-white flex flex-col justify-between space-y-4">
                     <div>
@@ -331,7 +403,7 @@
             </div>
 
             <!-- Tax Calculation Table Step-by-Step -->
-            <div class="border border-brand-border rounded-lg overflow-hidden">
+            <div class="border border-brand-border rounded-lg overflow-hidden break-inside-avoid">
                 <div class="bg-brand-card p-4 border-b border-brand-border flex justify-between items-center">
                     <h3 class="text-sm font-bold uppercase tracking-wider">ลำดับการคำนวณภาษี (Tax Waterfall)</h3>
                     <button id="toggleDetailsBtn" class="text-xs text-brand-muted hover:text-black underline no-print">ซ่อนรายละเอียด</button>
@@ -405,6 +477,80 @@
             <div id="adviceContainer" class="border border-brand-border bg-brand-card p-5 rounded-lg space-y-3 text-sm leading-relaxed">
                 <!-- Dynamic Content Generated by JS -->
             </div>
+        </section>
+
+        <!-- SECTION C2: TAX GUIDE & DOCUMENT CHECKLIST -->
+        <section class="space-y-4 break-inside-avoid">
+            <div class="border-b border-brand-border pb-3 flex justify-between items-end">
+                <h2 class="text-lg font-bold tracking-tight uppercase text-brand-text">4. คู่มือและเอกสารที่ต้องเตรียมยื่นภาษี</h2>
+                <span class="text-xs text-brand-muted">Tax Checklist & Guide</span>
+            </div>
+
+            <details class="group border border-brand-border rounded-lg bg-white overflow-hidden transition-all duration-200">
+                <summary class="flex justify-between items-center p-4 bg-brand-card cursor-pointer select-none hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-sm">📄 รายการเอกสารที่ต้องใช้ประกอบการยื่นแบบ (ภ.ง.ด.90 / ภ.ง.ด.91)</span>
+                    </div>
+                    <span class="text-xs text-brand-muted group-open:rotate-180 transition-transform duration-200 no-print">▼</span>
+                </summary>
+
+                <div class="p-5 space-y-6 text-sm border-t border-brand-border">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Group 1: Income Documents -->
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-xs uppercase tracking-wider text-black border-b border-brand-border pb-1">1. เอกสารหลักฐานรายได้</h4>
+                            <ul class="text-xs space-y-1.5 text-brand-text list-disc list-inside">
+                                <li><strong>หนังสือรับรองการหักภาษี ณ ที่จ่าย (ใบ 50 ทวิ)</strong> จากนายจ้าง/ผู้จ่ายเงิน</li>
+                                <li>สลิปเงินเดือนสรุปยอดทั้งปี (ถ้ามี)</li>
+                                <li>หลักฐานแสดงรายได้อื่นๆ เช่น ใบเสร็จรับเงิน/สัญญาจ้าง (สำหรับฟรีแลนซ์/รับเหมา)</li>
+                            </ul>
+                        </div>
+
+                        <!-- Group 2: Deduction Documents -->
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-xs uppercase tracking-wider text-black border-b border-brand-border pb-1">2. เอกสารค่าลดหย่อน</h4>
+                            <ul class="text-xs space-y-1.5 text-brand-text list-disc list-inside">
+                                <li>หนังสือรับรองชำระเบี้ยประกันภัย/ประกันสุขภาพ</li>
+                                <li>หนังสือรับรองการซื้อกองทุน (RMF / SSF / Thai ESG)</li>
+                                <li>หนังสือรับรองดอกเบี้ยกู้ยืมเพื่อซื้อบ้าน/คอนโด</li>
+                                <li>หนังสือรับรองจ่ายเงินสะสม กบข./กอช./กองทุนสำรองเลี้ยงชีพ</li>
+                            </ul>
+                        </div>
+
+                        <!-- Group 3: Donations & Special Measures -->
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-xs uppercase tracking-wider text-black border-b border-brand-border pb-1">3. เงินบริจาคและมาตรการรัฐ</h4>
+                            <ul class="text-xs space-y-1.5 text-brand-text list-disc list-inside">
+                                <li>ใบเสร็จรับเงินบริจาค หรือระบบ e-Donation ของกรมสรรพากร</li>
+                                <li>ใบกำกับภาษีเต็มรูปแบบ (กรณีใช้สิทธิ์ Easy E-Receipt/มาตรการรัฐ)</li>
+                                <li>สำเนาบัตรประชาชน/ทะเบียนบ้านบิดามารดา หรือบุตร (กรณียื่นลดหย่อนครอบครัว)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Steps to File Online -->
+                    <div class="border-t border-brand-border pt-4 space-y-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-black">📌 ขั้นตอนการยื่นภาษีออนไลน์ง่ายๆ ผ่าน e-Filing</h4>
+                        <ol class="text-xs space-y-1.5 text-brand-text list-decimal list-inside leading-relaxed">
+                            <li>เข้าเว็บไซต์กรมสรรพากร <strong>efiling.rd.go.th</strong> หรือแอปพลิเคชัน RD Smart Tax</li>
+                            <li>เข้าสู่ระบบด้วย Digital ID (D.DOPA, NDID, ThaiD) หรือ เลขบัตรประชาชน</li>
+                            <li>กรอกข้อมูลรายได้และค่าลดหย่อนตามที่ได้คำนวณไว้ในเครื่องมือนี้</li>
+                            <li>ตรวจสอบยอดภาษีชำระเพิ่มหรือขอคืน แล้วกดยืนยันการยื่นแบบ (อัปโหลดเอกสารประกอบหากสรรพากรขอตรวจสอบ)</li>
+                        </ol>
+                    </div>
+
+                    <!-- Filing Timeline -->
+                    <div class="bg-brand-card p-3 rounded border border-brand-border flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
+                        <div>
+                            <span class="font-bold text-black">🗓️ กำหนดการยื่นแบบภาษีประจำปี:</span>
+                            <span class="text-brand-muted ml-1">ยื่นแบบกระดาษภายใน 31 มี.ค. / ยื่นออนไลน์ e-Filing ได้ถึงประมาณ 8 เม.ย. ของทุกปี</span>
+                        </div>
+                        <a href="https://efiling.rd.go.th" target="_blank" rel="noopener noreferrer" class="font-medium underline text-black hover:text-gray-600 transition-colors no-print">
+                            ไปยังระบบ e-Filing กรมสรรพากร ↗
+                        </a>
+                    </div>
+                </div>
+            </details>
         </section>
 
         <!-- SECTION D: ACTION BUTTONS -->
@@ -520,6 +666,7 @@
         const bracketDetailsWrapper = document.getElementById('bracketDetailsWrapper');
         const resetFormBtn = document.getElementById('resetFormBtn');
         const printBtn = document.getElementById('printBtn');
+        const deductionsDetails = document.getElementById('deductionsDetails');
 
         // State variables
         let isExpenseManuallyEdited = false;
@@ -535,7 +682,6 @@
             let expense = 0;
 
             if (incomeType === 'MIXED') {
-                // Combined 40(1) and 40(2) max 100,000 total
                 const inc1 = mixedValues['40_1'] || 0;
                 const inc2 = mixedValues['40_2'] || 0;
                 const inc3 = mixedValues['40_3'] || 0;
@@ -543,9 +689,9 @@
                 const exp1_2 = Math.min(100000, combined1_2 * 0.5);
 
                 const exp3 = Math.min(100000, inc3 * 0.5);
-                const exp6 = (mixedValues['40_6'] || 0) * 0.3; // General medical/prof 30%
-                const exp7 = (mixedValues['40_7'] || 0) * 0.6; // Construction 60%
-                const exp8 = (mixedValues['40_8'] || 0) * 0.6; // Commerce 60%
+                const exp6 = (mixedValues['40_6'] || 0) * 0.3;
+                const exp7 = (mixedValues['40_7'] || 0) * 0.6;
+                const exp8 = (mixedValues['40_8'] || 0) * 0.6;
 
                 return exp1_2 + exp3 + exp6 + exp7 + exp8;
             }
@@ -553,23 +699,18 @@
             switch (incomeType) {
                 case '40_1':
                 case '40_2':
-                    // 50% max 100,000 baht
                     expense = Math.min(100000, gross * 0.5);
                     break;
                 case '40_3':
-                    // Copyrights: 50% max 100,000 baht
                     expense = Math.min(100000, gross * 0.5);
                     break;
                 case '40_6':
-                    // Professional 30% standard
                     expense = gross * 0.30;
                     break;
                 case '40_7':
-                    // Construction contract 60% standard
                     expense = gross * 0.60;
                     break;
                 case '40_8':
-                    // General Business/Trade 60% standard
                     expense = gross * 0.60;
                     break;
                 default:
@@ -584,9 +725,8 @@
         function calculateTax() {
             const incomeType = incomeTypeSelect.value;
             let grossIncome = 0;
-            let nonSalaryIncome = 0; // For Method 2 checking
+            let nonSalaryIncome = 0;
 
-            // 1. Determine Total Gross Income
             if (incomeType === 'MIXED') {
                 for (let k in mixedInputs) {
                     const val = getNum(mixedInputs[k]);
@@ -600,7 +740,6 @@
                 }
             }
 
-            // 2. Determine Expenses
             let autoExpense = 0;
             if (incomeType === 'MIXED') {
                 const mVals = {};
@@ -615,7 +754,6 @@
             }
             const finalExpenses = getNum(customExpenseInput);
 
-            // 3. Calculate Deductions
             const personal = TAX_CONFIG.personalAllowance;
             const spouse = Math.min(60000, getNum(dedSpouse));
             const child = getNum(dedChild) * TAX_CONFIG.childAllowance;
@@ -624,21 +762,17 @@
             const socialSec = Math.min(TAX_CONFIG.socialSecurityMax, getNum(dedSocialSec));
             const lifeIns = Math.min(TAX_CONFIG.lifeInsuranceMax, getNum(dedLifeIns));
             
-            // Retirement fund caps
             const rmf = getNum(dedRmf);
             const esgSsf = getNum(dedEsgSsf);
             const pension = getNum(dedPension);
             const homeLoan = Math.min(TAX_CONFIG.homeLoanMax, getNum(dedHomeLoan));
             const govPolicy = getNum(dedGovPolicy);
 
-            // Sum standard deductions before donations
             let baseDeductions = personal + spouse + child + parent + socialSec + lifeIns + rmf + esgSsf + pension + homeLoan + govPolicy;
 
-            // Income after expenses and initial deductions
             let netBeforeDonations = Math.max(0, grossIncome - finalExpenses - baseDeductions);
 
-            // Donation caps (max 10% of remaining net income)
-            const eduDonationCalculated = getNum(dedDonationEdu) * 2; // 2x allowance
+            const eduDonationCalculated = getNum(dedDonationEdu) * 2;
             const genDonationCalculated = getNum(dedDonationGen);
 
             const maxDonationCap = netBeforeDonations * 0.10;
@@ -647,10 +781,8 @@
             const totalDeductions = baseDeductions + totalDonationClaimed;
             deductionBadge.innerText = `${formatNumber(totalDeductions)} บาท`;
 
-            // 4. Net Taxable Income
             const netTaxableIncome = Math.max(0, grossIncome - finalExpenses - totalDeductions);
 
-            // 5. Method 1: Progressive Tax Brackets Calculation
             let taxMethod1 = 0;
             let tempNet = netTaxableIncome;
             const bracketBreakdown = [];
@@ -685,7 +817,6 @@
                 }
             });
 
-            // 6. Method 2: 0.5% of Non-Salary Gross Income (Applies if non-salary > 120,000)
             let taxMethod2 = 0;
             let isMethod2Applicable = false;
             if (nonSalaryIncome >= 120000) {
@@ -693,22 +824,17 @@
                 isMethod2Applicable = true;
             }
 
-            // Final Tax calculated before withholding
             let calculatedTax = isMethod2Applicable ? Math.max(taxMethod1, taxMethod2) : taxMethod1;
 
-            // If calculated tax method 2 is less than 5,000 THB, government waives method 2
             if (isMethod2Applicable && taxMethod2 < 5000) {
                 calculatedTax = taxMethod1;
             }
 
-            // 7. Subtract Withholding Tax
             const taxWithheld = getNum(taxWithheldInput);
             const finalTaxBalance = calculatedTax - taxWithheld;
 
-            // 8. Effective Tax Rate
             const effectiveRate = grossIncome > 0 ? (calculatedTax / grossIncome) * 100 : 0;
 
-            // RENDER RESULTS TO DOM
             renderResults({
                 grossIncome,
                 expenses: finalExpenses,
@@ -724,7 +850,6 @@
                 bracketBreakdown
             });
 
-            // RENDER ADVICE & INSIGHTS
             renderAdvice({
                 grossIncome,
                 netIncome: netTaxableIncome,
@@ -742,13 +867,12 @@
          * Render Calculation Results to Screen
          */
         function renderResults(data) {
-            // Main Big Card
             if (data.finalBalance > 0) {
                 taxStatusLabel.innerText = "ภาษีที่ต้องชำระเพิ่ม (Est. Tax Due)";
                 taxStatusLabel.className = "text-xs font-bold tracking-widest uppercase text-red-600";
                 finalTaxAmount.innerText = formatNumber(data.finalBalance);
                 finalTaxAmount.className = "text-4xl md:text-5xl font-extrabold font-mono tracking-tight text-red-600";
-                taxStatusSubtext.innerText = "ควรรวดเร็วและเตรียมสภาพคล่องสำหรับชำระภาษีตามกำหนดของกรมสรรพากร";
+                taxStatusSubtext.innerText = "ควรเตรียมสภาพคล่องสำหรับชำระภาษีตามกำหนดของกรมสรรพากร";
             } else if (data.finalBalance < 0) {
                 taxStatusLabel.innerText = "ภาษีที่ชำระไว้เกิน (ขอคืนได้)";
                 taxStatusLabel.className = "text-xs font-bold tracking-widest uppercase text-green-700";
@@ -765,7 +889,6 @@
 
             effectiveTaxRate.innerText = data.effectiveRate.toFixed(1);
 
-            // Step Breakdown
             stepGrossIncome.innerText = `${formatNumber(data.grossIncome)} บาท`;
             stepExpenses.innerText = `− ${formatNumber(data.expenses)} บาท`;
             stepDeductions.innerText = `− ${formatNumber(data.deductions)} บาท`;
@@ -783,7 +906,6 @@
                 method2Row.classList.remove('flex');
             }
 
-            // Brackets Table
             taxBracketRows.innerHTML = '';
             data.bracketBreakdown.forEach(b => {
                 const tr = document.createElement('tr');
@@ -807,7 +929,6 @@
             if (data.grossIncome === 0) {
                 html = `<p class="text-brand-muted">กรุณากรอกข้อมูลรายได้รวมของคุณ เพื่อให้ระบบวิเคราะห์ภาระภาษีและแสดงคำแนะนำเฉพาะบุคคล</p>`;
             } else {
-                // 1. Filing Requirement Alert
                 html += `
                     <div class="space-y-1">
                         <p class="font-bold text-black">📌 หน้าที่การยื่นแบบประเมินภาษี:</p>
@@ -819,7 +940,6 @@
                     </div>
                 `;
 
-                <!-- 2. Additional Tax planning opportunities -->
                 if (data.finalBalance > 0) {
                     html += `
                         <div class="space-y-1 border-t border-brand-border pt-2">
@@ -842,7 +962,6 @@
                     `;
                 }
 
-                // 3. Deduction optimization tips
                 if (data.netIncome > 150000) {
                     html += `
                         <div class="space-y-1 border-t border-brand-border pt-2 text-xs text-brand-muted">
@@ -860,7 +979,6 @@
 
         // EVENT LISTENERS & INTERACTION SETUP
 
-        // Toggle Mixed vs Single Income Mode
         incomeTypeSelect.addEventListener('change', (e) => {
             const val = e.target.value;
             isExpenseManuallyEdited = false;
@@ -875,7 +993,6 @@
             calculateTax();
         });
 
-        // Listen for input changes across all form fields
         const allInputs = document.querySelectorAll('input[type="number"]');
         allInputs.forEach(input => {
             input.addEventListener('input', () => {
@@ -886,18 +1003,15 @@
             });
         });
 
-        // Reset manual expense trigger
         resetExpenseBtn.addEventListener('click', () => {
             isExpenseManuallyEdited = false;
             calculateTax();
         });
 
-        // Tax Year selection update trigger
         taxYearSelect.addEventListener('change', () => {
             calculateTax();
         });
 
-        // Toggle calculation details section visibility
         let detailsVisible = true;
         toggleDetailsBtn.addEventListener('click', () => {
             detailsVisible = !detailsVisible;
@@ -910,7 +1024,6 @@
             }
         });
 
-        // Reset all form entries
         resetFormBtn.addEventListener('click', () => {
             allInputs.forEach(input => {
                 if (input.id === 'ded_socialSecurity') {
@@ -926,9 +1039,16 @@
             calculateTax();
         });
 
-        // Print action trigger
+        // ROBUST PRINT & SAVE TO PDF FUNCTION
         printBtn.addEventListener('click', () => {
-            window.print();
+            // Ensure details section is open for full print summary
+            deductionsDetails.open = true;
+            bracketDetailsWrapper.classList.remove('hidden');
+            
+            // Allow DOM to update before opening native print dialog
+            setTimeout(() => {
+                window.print();
+            }, 150);
         });
 
         // INITIAL RUN ON LOAD
